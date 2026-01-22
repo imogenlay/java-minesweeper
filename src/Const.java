@@ -7,6 +7,11 @@ public class Const
 	public static final String HORIZONTAL_SEGMENT_BOTTOM = "╈━━━";
 	public static final String HORIZONTAL_END = "╋╸\n";
 
+	// Game State
+	public static final byte PLAYING = 0;
+	public static final byte WIN = 1;
+	public static final byte LOSE = 1;
+
 	// Grid data types.
 	public static final byte GRID_UNKNOWN = 0;
 	public static final byte GRID_MINE = 1;

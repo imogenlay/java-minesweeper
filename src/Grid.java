@@ -3,11 +3,10 @@ import java.util.Random;
 
 public class Grid
 {
-
-
 	private final int width;
 	private final int height;
 	private final byte[] mineGrid;
+	private byte gameState = Const.PLAYING;
 
 	public Grid(int _width, int _height)
 	{
@@ -16,6 +15,8 @@ public class Grid
 		mineGrid = new byte[width * height];
 		restart();
 	}
+
+	public byte getGameState() { return gameState; }
 
 	public void restart()
 	{
@@ -75,7 +76,7 @@ public class Grid
 			}
 
 		if (winner)
-			System.out.println("WINNER O CLOCK");
+			gameState = Const.WIN;
 	}
 
 	private void revealGrid(int x, int y, boolean force)
@@ -92,7 +93,7 @@ public class Grid
 				// We only reveal the mine if it was 'forced'.
 				// Forcing only occurs on the first click, all
 				// recursive functions do not force.
-				System.out.println("HIT THE MINE WHOOPSIE");
+				gameState = Const.LOSE;
 			}
 			return;
 		}
@@ -105,7 +106,7 @@ public class Grid
 
 		if (value == Const.GRID_UNKNOWN)
 		{
-			// Reveal self and maybe neighbours.
+			// Check neighbours for mines.
 			byte neighbouringMines = Const.REVEALED_MIN;
 			for (int neighbourX = x - 1; neighbourX <= x + 1; neighbourX++)
 				for (int neighbourY = y - 1; neighbourY <= y + 1; neighbourY++)
@@ -120,6 +121,8 @@ public class Grid
 
 			setValueAtCoordinate(x, y, neighbouringMines);
 
+			// Try reveal neighbours. These will not force any
+			// reveal on mines.
 			revealGrid(x - 1, y + 0, false);
 			revealGrid(x + 0, y - 1, false);
 			revealGrid(x + 1, y + 0, false);
@@ -146,22 +149,8 @@ public class Grid
 		mineGrid[index] = value;
 	}
 
-	private void addHorizontalLineToStringBuilder(StringBuilder sb, boolean isTop)
-	{
-		sb.append(Const.HORIZONTAL_START);
-		for (int i = 0; i < width; i++)
-		{
-			if (i == 0)
-				sb.append(Const.HORIZONTAL_SEGMENT_FIRST);
-			else if (isTop)
-				sb.append(Const.HORIZONTAL_SEGMENT_TOP);
-			else
-				sb.append(Const.HORIZONTAL_SEGMENT_BOTTOM);
-		}
-		sb.append(Const.HORIZONTAL_END);
-	}
-
-	public String printGrid()
+	@Override
+	public String toString()
 	{
 		StringBuilder sb = new StringBuilder(" ");
 		for (int x = 0; x < width; x++)
@@ -175,7 +164,7 @@ public class Grid
 				sb.append("   " + x); // Needs three spaces.
 		}
 		sb.append('\n');
-		addHorizontalLineToStringBuilder(sb, true);
+		Utils.addHorizontalLineToStringBuilder(sb, width, true);
 
 		for (int y = 0; y < height; y++)
 		{
@@ -201,11 +190,8 @@ public class Grid
 			sb.append("┃\n");
 		}
 
-
 		// Add final row.
-		addHorizontalLineToStringBuilder(sb, false);
+		Utils.addHorizontalLineToStringBuilder(sb, width, false);
 		return sb.toString();
 	}
-
-
 }
