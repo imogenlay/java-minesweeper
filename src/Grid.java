@@ -21,11 +21,12 @@ public class Grid
 	public void restart()
 	{
 		Random random = new Random();
-		for (int i = 0; i < 50; i++)
+		int bombCount = (int) (width * height * 0.35f);
+
+		for (int i = 0; i < bombCount; i++)
 		{
-			int bombX = random.nextInt(width);
-			int bombY = random.nextInt(height);
-			mineGrid[getIndex(bombX, bombY)] = Const.GRID_MINE;
+			int bombIndex = random.nextInt(mineGrid.length);
+			mineGrid[bombIndex] = Const.GRID_MINE;
 		}
 	}
 
@@ -39,30 +40,12 @@ public class Grid
 
 	public void attemptRunCommand(String command)
 	{
-		String[] commandParts = command.trim().split("\\s+");
-		if (commandParts.length != 2)
-		{
-			System.out.println("Could not read command. Only add two numbers separated by a space.");
-			return;
-		}
+		int[] coord = Utils.parseCoordInput(command);
+		int x = coord[0];
+		int y = coord[1];
 
-		int x, y;
-		int[] out = new int[1];
-		if (Utils.tryParseInt(commandParts[0], out))
-			x = out[0];
-		else
-		{
-			System.out.println("Could not read x value. Only add two numbers separated by a space.");
+		if (x == -1 || y == -1)
 			return;
-		}
-
-		if (Utils.tryParseInt(commandParts[1], out))
-			y = out[0];
-		else
-		{
-			System.out.println("Could not read y value. Only add two numbers separated by a space.");
-			return;
-		}
 
 		revealGrid(x, y, true);
 
@@ -179,9 +162,18 @@ public class Grid
 				// Add each grid item.
 				byte value = mineGrid[getIndex(x, y)];
 
+				if (value == Const.GRID_MINE)
+				{
+					// Change the mine visual if the game is over!
+					if (gameState == Const.WIN)
+						value = Const.GRID_REVEALED_MINE_WIN;
+					else if (gameState == Const.LOSE)
+						value = Const.GRID_REVEALED_MINE_LOSE;
+				}
+
 				sb.append(" ");
 				sb.append(Const.dataDefinitions[value]);
-				sb.append(" "); // ╂│┼
+				sb.append(" ");
 				if (x + 1 < width)
 					sb.append("┼");
 			}

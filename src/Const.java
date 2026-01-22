@@ -10,21 +10,26 @@ public class Const
 	// Game State
 	public static final byte PLAYING = 0;
 	public static final byte WIN = 1;
-	public static final byte LOSE = 1;
+	public static final byte LOSE = 2;
 
 	// Grid data types.
 	public static final byte GRID_UNKNOWN = 0;
 	public static final byte GRID_MINE = 1;
 	public static final byte GRID_OUT_OF_BOUNDS = 2;
+	public static final byte GRID_REVEALED_MINE_WIN = 2;
+	public static final byte GRID_REVEALED_MINE_LOSE = 3;
 	public static final byte REVEALED_MIN = 10;
 	public static final byte REVEALED_MAX = 19;
 
+	// BANG
+	// WIN!
+
 	// Grid display characters.
 	public static final char[] dataDefinitions = {
-			'░', // Unknown = 0 ░
-			'●', // Mine = 1 ●
-			'?', // Out of Bounds = 2
-			'?', // 3
+			'░', // Unknown = 0
+			'●', // Mine = 1
+			'●', // Revealed Mine / Out of Bounds = 2
+			'X', // Revealed Mine (Lose)
 			'?', // 4
 			'?', // 5
 			'?', // 6

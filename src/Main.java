@@ -6,34 +6,54 @@ public class Main
 	{
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Welcome to Minesweeper!");
-		System.out.println("What dimensions would you like the board?");
+		int x = -1;
+		int y = -1;
+		String input;
+		Grid grid;
+		boolean continuePlaying = true;
 
-		Grid grid = new Grid(12, 12);
-		System.out.println(grid);
-
-		while (true)
+		while (continuePlaying)
 		{
-			System.out.println("Please input a coordinate:");
-			String input = scanner.nextLine();
+			System.out.println("What dimensions would you like the board? Minimum: 8x8");
+			input = scanner.nextLine();
+			int[] coord = Utils.parseCoordInput(input);
+			x = coord[0];
+			y = coord[1];
+			if (x == -1 || y == -1)
+				continue;
+			if (x < 8 || y < 8)
+			{
+				System.out.println("Minimum size is 8 by 8.");
+				continue;
+			}
 
-			grid.attemptRunCommand(input);
+			grid = new Grid(x, y);
 			System.out.println(grid);
 
-			byte gameState = grid.getGameState();
-			if (gameState == Const.PLAYING)
-				continue;
+			while (continuePlaying)
+			{
+				System.out.println("Please input a coordinate:");
+				input = scanner.nextLine();
 
-			if (gameState == Const.WIN)
-				System.out.println("HOORAY! You are the winner!");
-			else
-				System.out.println("You lose!");
+				grid.attemptRunCommand(input);
+				System.out.println(grid);
 
-			System.out.println("Do you want to play again?");
-			input = scanner.nextLine();
-			if (input.contains("y"))
-				continue;
+				byte gameState = grid.getGameState();
+				if (gameState == Const.PLAYING)
+					continue;
 
-			break;
+				if (gameState == Const.WIN)
+					System.out.println("HOORAY! You are the winner!");
+				else
+					System.out.println("You hit a mine! You lose!");
+
+				System.out.println("Do you want to play again?");
+				input = scanner.nextLine();
+				if (input.contains("y"))
+					break;
+
+				continuePlaying = false;
+			}
 		}
 
 		System.out.println("Thank you for playing!");
