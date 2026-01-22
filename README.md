@@ -1,29 +1,11 @@
-# Project: Minesweeper
+## Project Summary: Console Minesweeper (Java)
 
-## MVP
+This project recreates a simplified version of the classic Minesweeper game as a Java console application. The game
+generates a configurable square grid containing randomly placed mines.
 
-Recreate a simplified version of the game Minesweeper to be played in the java console
-The game should be able to randomly generate 10 mines in a 10x10 grid
-The user will be able to enter a command that represents a coordinate to check a location for a mine
-The application will display a number from 0-8 depending on how many mines surround that location
-If the user selects a mine, the game will respond "boom!" and the game will be lost
-If every non-mine square has been revealed, the game is won
-Render the grid to the console after every user command
-
-```
-+---+---+
-|   | 1 |
-+---+---+
-|   | * |
-+---+---+
-```
-
-```
-[ ][ ][1]
-[ ][ ][*]
-```
-
-## Bonuses (optional)
-
-Allow for the user to configure number of mines and grid size via a configuration.
-(Difficult) Discovering an empty square should reveal all squares around it, and cascade into other nearby empty squares
+Players interact with the game by entering coordinate-based commands to reveal tiles on the grid. After every command,
+the current state of the grid is rendered to the console. Each revealed tile displays a number from 0 to 8, indicating how
+many mines are adjacent to that location. If a mine is revealed, the game
+ends. The game continues until either a mine is triggered or all non-mine tiles have been successfully revealed, in which case
+the player wins. When an empty tile (with zero adjacent mines) is revealed, the game automatically reveals all
+surrounding tiles and recursively cascades through connected empty areas, matching standard Minesweeper behavior.
