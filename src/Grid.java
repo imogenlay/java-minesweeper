@@ -3,45 +3,11 @@ import java.util.Random;
 
 public class Grid
 {
-	//public static final char PIPE_HORIZONTAL = 0x2501;
-	public static final String HORIZONTAL_START = " ╺";
-	public static final String HORIZONTAL_SEGMENT_FIRST = "╋━━━";
-	public static final String HORIZONTAL_SEGMENT_TOP = "╇━━━";
-	public static final String HORIZONTAL_SEGMENT_BOTTOM = "╈━━━";
-	public static final String HORIZONTAL_END = "╋╸\n";
+
 
 	private final int width;
 	private final int height;
 	private final byte[] mineGrid;
-	public static final byte GRID_UNKNOWN = 0;
-	public static final byte GRID_MINE = 1;
-	public static final byte GRID_OUT_OF_BOUNDS = 2;
-	public static final byte REVEALED_MIN = 10;
-	public static final byte REVEALED_MAX = 19;
-
-	private final char[] dataDefinitions = {
-			'░', // Unknown = 0 ░
-			'●', // Mine = 1 ●
-			'?', // Out of Bounds = 2
-			'?', // 3
-			'?', // 4
-			'?', // 5
-			'?', // 6
-			'?', // 7
-			'?', // 8
-			'?', // 9
-			// Revealed
-			' ', // 0 Mines nearby = 10
-			'1', // 1 Mines nearby = 11
-			'2', // 2 Mines nearby = 12
-			'3', // 3 Mines nearby = 13
-			'4', // 4 Mines nearby = 14
-			'5', // 5 Mines nearby = 15
-			'6', // 6 Mines nearby = 16
-			'7', // 7 Mines nearby = 17
-			'8', // 8 Mines nearby = 18
-			'9', // Revealed Max   = 19
-	};
 
 	public Grid(int _width, int _height)
 	{
@@ -58,7 +24,7 @@ public class Grid
 		{
 			int bombX = random.nextInt(width);
 			int bombY = random.nextInt(height);
-			mineGrid[getIndex(bombX, bombY)] = GRID_MINE;
+			mineGrid[getIndex(bombX, bombY)] = Const.GRID_MINE;
 		}
 	}
 
@@ -102,7 +68,7 @@ public class Grid
 		// Scan grid to see if we have a winner!
 		boolean winner = true;
 		for (int i = 0; i < mineGrid.length; i++)
-			if (mineGrid[i] == GRID_UNKNOWN)
+			if (mineGrid[i] == Const.GRID_UNKNOWN)
 			{
 				winner = false;
 				break;
@@ -116,10 +82,10 @@ public class Grid
 	{
 		byte value = getValueAtCoordinate(x, y);
 
-		if (value == GRID_OUT_OF_BOUNDS)
+		if (value == Const.GRID_OUT_OF_BOUNDS)
 			return;
 
-		if (value == GRID_MINE)
+		if (value == Const.GRID_MINE)
 		{
 			if (force)
 			{
@@ -131,16 +97,16 @@ public class Grid
 			return;
 		}
 
-		if (value >= REVEALED_MIN && value < REVEALED_MAX)
+		if (value >= Const.REVEALED_MIN && value < Const.REVEALED_MAX)
 		{
 			// Already revealed.
 			return;
 		}
 
-		if (value == GRID_UNKNOWN)
+		if (value == Const.GRID_UNKNOWN)
 		{
 			// Reveal self and maybe neighbours.
-			byte neighbouringMines = REVEALED_MIN;
+			byte neighbouringMines = Const.REVEALED_MIN;
 			for (int neighbourX = x - 1; neighbourX <= x + 1; neighbourX++)
 				for (int neighbourY = y - 1; neighbourY <= y + 1; neighbourY++)
 				{
@@ -148,7 +114,7 @@ public class Grid
 						continue;
 
 					byte neighbouringCell = getValueAtCoordinate(neighbourX, neighbourY);
-					if (neighbouringCell == GRID_MINE)
+					if (neighbouringCell == Const.GRID_MINE)
 						neighbouringMines++;
 				}
 
@@ -166,7 +132,7 @@ public class Grid
 		int index = getIndex(x, y);
 		if (index == -1)
 			// Out of bounds.
-			return GRID_OUT_OF_BOUNDS;
+			return Const.GRID_OUT_OF_BOUNDS;
 
 		return mineGrid[index];
 	}
@@ -182,17 +148,17 @@ public class Grid
 
 	private void addHorizontalLineToStringBuilder(StringBuilder sb, boolean isTop)
 	{
-		sb.append(HORIZONTAL_START);
+		sb.append(Const.HORIZONTAL_START);
 		for (int i = 0; i < width; i++)
 		{
 			if (i == 0)
-				sb.append(HORIZONTAL_SEGMENT_FIRST);
+				sb.append(Const.HORIZONTAL_SEGMENT_FIRST);
 			else if (isTop)
-				sb.append(HORIZONTAL_SEGMENT_TOP);
+				sb.append(Const.HORIZONTAL_SEGMENT_TOP);
 			else
-				sb.append(HORIZONTAL_SEGMENT_BOTTOM);
+				sb.append(Const.HORIZONTAL_SEGMENT_BOTTOM);
 		}
-		sb.append(HORIZONTAL_END);
+		sb.append(Const.HORIZONTAL_END);
 	}
 
 	public String printGrid()
@@ -225,7 +191,7 @@ public class Grid
 				byte value = mineGrid[getIndex(x, y)];
 
 				sb.append(" ");
-				sb.append(dataDefinitions[value]);
+				sb.append(Const.dataDefinitions[value]);
 				sb.append(" "); // ╂│┼
 				if (x + 1 < width)
 					sb.append("┼");
