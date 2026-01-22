@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Random;
 
 public class Grid
@@ -34,8 +33,7 @@ public class Grid
 	{
 		if (x < 0 || y < 0 || x >= width || y >= height)
 			return -1;
-		int index = y * width + x;
-		return index;
+		return y * width + x;
 	}
 
 	public void attemptRunCommand(String command)
@@ -51,8 +49,8 @@ public class Grid
 
 		// Scan grid to see if we have a winner!
 		boolean winner = true;
-		for (int i = 0; i < mineGrid.length; i++)
-			if (mineGrid[i] == Const.GRID_UNKNOWN)
+		for (byte b : mineGrid)
+			if (b == Const.GRID_UNKNOWN)
 			{
 				winner = false;
 				break;
@@ -110,16 +108,14 @@ public class Grid
 				// and there are no nearby mines.
 				// These will not force any reveal on mines.
 				revealGrid(x - 1, y - 1, false);
-				revealGrid(x - 1, y + 0, false);
+				revealGrid(x - 1, y, false);
 				revealGrid(x - 1, y + 1, false);
 
-
-				revealGrid(x + 0, y - 1, false);
-				revealGrid(x + 0, y + 0, false);
-				revealGrid(x + 0, y + 1, false);
+				revealGrid(x, y - 1, false);
+				revealGrid(x, y + 1, false);
 
 				revealGrid(x + 1, y - 1, false);
-				revealGrid(x + 1, y + 0, false);
+				revealGrid(x + 1, y, false);
 				revealGrid(x + 1, y + 1, false);
 			}
 		}
@@ -154,9 +150,9 @@ public class Grid
 			// Check to see if the number will take up
 			// one or two characters.
 			if (x > 10)
-				sb.append("  " + x); // Needs two spaces.
+				sb.append("  ").append(x); // Needs two spaces.
 			else
-				sb.append("   " + x); // Needs three spaces.
+				sb.append("   ").append(x); // Needs three spaces.
 		}
 		sb.append('\n');
 		Utils.addHorizontalLineToStringBuilder(sb, width, true);
