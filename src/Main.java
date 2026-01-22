@@ -4,12 +4,12 @@ public class Main
 {
 	public static void main(String[] args)
 	{
-		Scanner scanner = new Scanner(System.in);
 		System.out.println("Welcome to Minesweeper!");
-		int x = -1;
-		int y = -1;
+		int x, y;
 		String input;
 		Grid grid;
+		
+		Scanner scanner = new Scanner(System.in);
 		boolean continuePlaying = true;
 
 		while (continuePlaying)
@@ -26,6 +26,8 @@ public class Main
 				System.out.println("Minimum size is 8 by 8.");
 				continue;
 			}
+			x = Math.min(x, 40);
+			y = Math.min(y, 40);
 
 			grid = new Grid(x, y);
 			System.out.println(grid);

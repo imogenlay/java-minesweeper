@@ -21,7 +21,7 @@ public class Grid
 	public void restart()
 	{
 		Random random = new Random();
-		int bombCount = (int) (width * height * 0.35f);
+		int bombCount = (int) (width * height * 0.25f);
 
 		for (int i = 0; i < bombCount; i++)
 		{
@@ -104,12 +104,24 @@ public class Grid
 
 			setValueAtCoordinate(x, y, neighbouringMines);
 
-			// Try reveal neighbours. These will not force any
-			// reveal on mines.
-			revealGrid(x - 1, y + 0, false);
-			revealGrid(x + 0, y - 1, false);
-			revealGrid(x + 1, y + 0, false);
-			revealGrid(x + 0, y + 1, false);
+			if (neighbouringMines == Const.REVEALED_MIN)
+			{
+				// Try reveal neighbours if this spot is empty
+				// and there are no nearby mines.
+				// These will not force any reveal on mines.
+				revealGrid(x - 1, y - 1, false);
+				revealGrid(x - 1, y + 0, false);
+				revealGrid(x - 1, y + 1, false);
+
+
+				revealGrid(x + 0, y - 1, false);
+				revealGrid(x + 0, y + 0, false);
+				revealGrid(x + 0, y + 1, false);
+
+				revealGrid(x + 1, y - 1, false);
+				revealGrid(x + 1, y + 0, false);
+				revealGrid(x + 1, y + 1, false);
+			}
 		}
 	}
 
@@ -165,10 +177,8 @@ public class Grid
 				if (value == Const.GRID_MINE)
 				{
 					// Change the mine visual if the game is over!
-					if (gameState == Const.WIN)
-						value = Const.GRID_REVEALED_MINE_WIN;
-					else if (gameState == Const.LOSE)
-						value = Const.GRID_REVEALED_MINE_LOSE;
+					if (gameState == Const.WIN || gameState == Const.LOSE)
+						value = Const.GRID_REVEALED_MINE;
 				}
 
 				sb.append(" ");
