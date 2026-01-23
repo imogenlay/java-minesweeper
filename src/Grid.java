@@ -7,26 +7,24 @@ public class Grid
 	private final byte[] mineGrid;
 	private byte gameState = Const.PLAYING;
 
-	public Grid(int _width, int _height)
+	public Grid(int _width, int _height, float minePercent)
 	{
 		width = _width;
 		height = _height;
 		mineGrid = new byte[width * height];
-		restart();
+		restart(minePercent);
 	}
 
 	public byte getGameState() { return gameState; }
 
-	public void restart()
+	public void restart(float minePercent)
 	{
-		Random random = new Random();
-		int bombCount = (int) (width * height * 0.25f);
+		minePercent = Math.clamp(minePercent, 0f, 0.95f);
+		int bombCount = Math.max(2, (int) (mineGrid.length * minePercent));
+		int[] bombIndex = Utils.getRandomIndexArray(mineGrid.length);
 
-		for (int i = 0; i < bombCount; i++)
-		{
-			int bombIndex = random.nextInt(mineGrid.length);
-			mineGrid[bombIndex] = Const.GRID_MINE;
-		}
+		for (int i = 0; i < bombCount && i < mineGrid.length; i++)
+			mineGrid[bombIndex[i]] = Const.GRID_MINE;
 	}
 
 	public int getIndex(int x, int y)

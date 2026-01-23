@@ -8,7 +8,7 @@ public class Main
 		int x, y;
 		String input;
 		Grid grid;
-		
+
 		Scanner scanner = new Scanner(System.in);
 		boolean continuePlaying = true;
 
@@ -29,7 +29,10 @@ public class Main
 			x = Math.min(x, 40);
 			y = Math.min(y, 40);
 
-			grid = new Grid(x, y);
+			System.out.println("What percentage of the tiles should be mines? Recommended: 20%");
+			input = scanner.nextLine();
+			float percentage = Utils.tryParseFloat(input);
+			grid = new Grid(x, y, percentage);
 			System.out.println(grid);
 
 			while (continuePlaying)

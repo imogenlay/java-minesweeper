@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Utils
 {
 	public static boolean tryParseInt(String s, int[] out)
@@ -10,6 +12,20 @@ public class Utils
 		catch (NumberFormatException e)
 		{
 			return false;
+		}
+	}
+
+	public static float tryParseFloat(String s)
+	{
+		String number = s.trim().replaceAll("%", "");
+		try
+		{
+			float value = Float.parseFloat(number);
+			return value / 100f;
+		}
+		catch (NumberFormatException e)
+		{
+			return 25;
 		}
 	}
 
@@ -59,5 +75,24 @@ public class Utils
 				sb.append(Const.HORIZONTAL_SEGMENT_BOTTOM);
 		}
 		sb.append(Const.HORIZONTAL_END);
+	}
+
+	public static int[] getRandomIndexArray(int length)
+	{
+		int[] array = new int[length];
+		for (int i = 0; i < length; i++)
+			array[i] = i;
+
+		// Randomise order.
+		Random random = new Random();
+		for (int i = length - 1; i > 0; i--)
+		{
+			int j = random.nextInt(i + 1);
+			int temp = array[i];
+			array[i] = array[j];
+			array[j] = temp;
+		}
+
+		return array;
 	}
 }
