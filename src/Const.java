@@ -20,9 +20,6 @@ public class Const
 	public static final byte REVEALED_MIN = 10;
 	public static final byte REVEALED_MAX = 19;
 
-	// BANG
-	// WIN!
-
 	// Grid display characters.
 	public static final char[] dataDefinitions = {
 			'░', // Unknown = 0
